@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>端午礼物</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            width: 100vw;
+            height: 100vh;
+            background: #000000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        /* 文字闪烁动画 */
+        @keyframes flashText {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+        .title-flash {
+            font-size: 42px;
+            color: #ffffff;
+            font-weight: bold;
+            margin-bottom: 30px;
+            animation: flashText 1.2s infinite ease-in-out;
+        }
+        /* 爱心信封 */
+        .envelope-box {
+            width: 180px;
+            height: auto;
+            cursor: pointer;
+            filter: drop-shadow(0 0 12px #fff8e877);
+            transition: scale 0.2s;
+        }
+        .envelope-box:hover {
+            transform: scale(1.08);
+        }
+        .bottom-tip {
+            margin-top: 40px;
+            font-size: 18px;
+            color: #eee;
+        }
+
+        /* 全屏视频遮罩容器 */
+        .video-mask {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            z-index: 999;
+        }
+        /* 固定在最顶部红字，尺寸颜色位置完全不变，层级高于视频 */
+        .top-red-text {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 22px;
+            color: red;
+            font-weight: bold;
+            padding: 12px 0;
+            z-index: 1000; /* 放在视频上层 */
+        }
+        /* 视频铺满全屏 */
+        #targetVideo {
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover; /* 视频铺满屏幕不变形裁剪填充 */
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- 首页界面 -->
+    <div class="title-flash">送你的端午礼物🎁</div>
+    <img class="envelope-box" id="clickEnv" src="信封.jpg" alt="爱心信封">
+    <p class="bottom-tip">涵制作</p>
+
+    <!-- 全屏视频弹窗 -->
+    <div class="video-mask" id="videoLayer">
+        <!-- 固定在视频最上层的红字 -->
+        <div class="top-red-text">你被骗了</div>
+        <video autoplay loop playsinline id="targetVideo">
+            <source src="video.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <script>
+        const envImg = document.getElementById('clickEnv');
+        const videoLayer = document.getElementById('videoLayer');
+        const video = document.getElementById('targetVideo');
+
+        envImg.onclick = () => {
+            videoLayer.style.display = 'block';
+            video.muted = false;
+            video.play();
+        }
+
+        // 禁止视频暂停操作
+        video.addEventListener('click', e => e.preventDefault());
+        video.addEventListener('pause', () => {
+            video.play();
+        });
+    </script>
+</body>
+</html>
